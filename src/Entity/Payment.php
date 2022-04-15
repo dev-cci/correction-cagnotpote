@@ -45,7 +45,7 @@ class Payment
     /**
      * @var \Participant
      *
-     * @ORM\ManyToOne(targetEntity="Participant")
+     * @ORM\ManyToOne(targetEntity="Participant", inversedBy="payments")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="participant_id", referencedColumnName="id")
      * })
@@ -104,6 +104,5 @@ class Payment
 
         return $this;
     }
-
 
 }
