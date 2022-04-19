@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Campaign;
+use App\Entity\Participant;
 use App\Entity\Payment;
 use App\Form\CampaignType;
+use App\Form\PaymentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -100,4 +102,33 @@ class CampaignController extends AbstractController
 
         return $this->redirectToRoute('app_campaign_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/payment', name: 'app_campaign_payment', methods: ['GET', 'POST'])]
+    public function payment(Campaign $campaign, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $payment = new Payment();
+        $form = $this->createForm(PaymentType::class, $payment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $participant = new Participant();
+            $participant->setEmail($form->get("email")->getData());
+            $participant->setCampaign($campaign);
+            $entityManager->persist($participant);
+
+            $payment->setParticipant($participant);
+
+            $entityManager->persist($payment);
+            $entityManager->flush();
+
+
+            return $this->redirectToRoute('app_campaign_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('campaign/payment.html.twig', [
+            'payment' => $payment,
+            'form' => $form,
+        ]);
+    }
+    //pas compris
 }
