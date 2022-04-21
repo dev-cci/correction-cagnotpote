@@ -18,11 +18,13 @@
                 <div class="row">
                     <div class="card col s12 m12 l8 offset-l2">
                         <div class="card-content">
-                            <div class="input-field col s12 l8">
-                                <input id="cag_name" type="text" class="validate">
-                                <label for="cag_name">Nommez votre nouvelle campagne</label>
-                            </div>
-                            <a href="create.html" class="btn-large waves-effect waves-light pink lighten-1 col s12 l4">Valider</a>
+                            <form action="{{ path('app_campaign_new') }}" method="post">
+                                <div class="input-field col s12 l8">
+                                    <input id="cag_name" type="text" class="validate" name="name">
+                                    <label for="cag_name">Nommez votre nouvelle campagne</label>
+                                </div>
+                                <button type="submit" class="btn-large waves-effect waves-light pink lighten-1 col s12 l4">Valider</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -92,112 +94,32 @@
             <div class="row">
                 <div class="col s12">
                     <div class="carousel">
-                        <a class="carousel-item" href="#one!">
+
+                    {% for campaign in campaigns %}
+                        <a class="carousel-item" href="{{ path('app_campaign_show', {'id': campaign.id}) }}">
                             <div class="card center">
                                 <div class="card-content">
-                                    <span class="card-title teal-text">Titre campagne</span>
-                                    <p class="black-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                                    <span class="card-title teal-text">{{ campaign.title }}</span>
+                                    <p class="black-text">{{ campaign.content|markdown_to_html|striptags[0:20] }} {% if campaign.content|length > 20 %}...{% endif %}</p>
                                 </div>
                                 <div class="card-action">
                                     <div class="row black-text">
                                         <div class="col s6">
-                                            <i class="material-icons teal-text">account_circle</i> <b>12</b>
+                                            <i class="material-icons teal-text">account_circle</i> <b>{{ campaign.participants|length }}</b>
                                         </div>
                                         <div class="col s6">
-                                            <i class="material-icons teal-text">euro_symbol</i> <b>350</b>
+                                            <i class="material-icons teal-text">euro_symbol</i> <b>{{ campaign.goal }}</b>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="progress">
-                                    <div class="determinate" style="width: 70%"></div>
+                                    <div class="determinate" style="width: {{ campaign.getCompletionPercent() }}%"></div>
                                 </div>
                             </div>
                         </a>
-                        <a class="carousel-item" href="#two!">
-                            <div class="card center">
-                                <div class="card-content">
-                                    <span class="card-title teal-text">Titre campagne</span>
-                                    <p class="black-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                                </div>
-                                <div class="card-action">
-                                    <div class="row black-text">
-                                        <div class="col s6">
-                                            <i class="material-icons teal-text">account_circle</i> <b>12</b>
-                                        </div>
-                                        <div class="col s6">
-                                            <i class="material-icons teal-text">euro_symbol</i> <b>350</b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="determinate" style="width: 70%"></div>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="carousel-item" href="#three!">
-                            <div class="card center">
-                                <div class="card-content">
-                                    <span class="card-title teal-text">Titre campagne</span>
-                                    <p class="black-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                                </div>
-                                <div class="card-action">
-                                    <div class="row black-text">
-                                        <div class="col s6">
-                                            <i class="material-icons teal-text">account_circle</i> <b>12</b>
-                                        </div>
-                                        <div class="col s6">
-                                            <i class="material-icons teal-text">euro_symbol</i> <b>350</b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="determinate" style="width: 70%"></div>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="carousel-item" href="#four!">
-                            <div class="card center">
-                                <div class="card-content">
-                                    <span class="card-title teal-text">Titre campagne</span>
-                                    <p class="black-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                                </div>
-                                <div class="card-action">
-                                    <div class="row black-text">
-                                        <div class="col s6">
-                                            <i class="material-icons teal-text">account_circle</i> <b>12</b>
-                                        </div>
-                                        <div class="col s6">
-                                            <i class="material-icons teal-text">euro_symbol</i> <b>350</b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="determinate" style="width: 70%"></div>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="carousel-item" href="#five!">
-                            <div class="card center">
-                                <div class="card-content">
-                                    <span class="card-title teal-text">Titre campagne</span>
-                                    <p class="black-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                                </div>
-                                <div class="card-action">
-                                    <div class="row black-text">
-                                        <div class="col s6">
-                                            <i class="material-icons teal-text">account_circle</i> <b>12</b>
-                                        </div>
-                                        <div class="col s6">
-                                            <i class="material-icons teal-text">euro_symbol</i> <b>350</b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="determinate" style="width: 70%"></div>
-                                </div>
-                            </div>
-                        </a>
+                    {% endfor %}
+
                     </div>
                 </div>
             </div>

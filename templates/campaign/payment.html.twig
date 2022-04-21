@@ -4,9 +4,9 @@
     <div class="parallax-container valign-wrapper">
         <div class="section no-pad-bot">
             <div class="container">
-                <h1 class="header center white-text light">Titre de la campagne</h1>
+                <h1 class="header center white-text light">{{ campaign.title }}</h1>
                 <div class="row center">
-                    <h5 class="header col s12 light">- Organisée par : Nom de l'auteur -</h5>
+                    <h5 class="header col s12 light">- Organisée par : {{ campaign.name }} -</h5>
                 </div>
             </div>
         </div>
@@ -27,24 +27,22 @@
                         {{form_start(form)}}
                             <h5 class="center">Votre identité</h5>
                             <div class="input-field col s12 l6">
-
-                                {{form_widget(form.email, {'attr':{'class':'validate'}})}}
-
-                                <label for="email">Votre Email</label>
+                                {{ form_widget(form.email, {'attr':{'class':'validate'}}) }}
+                                {{ form_label(form.email, 'Votre email') }}
                             </div>
                             <div class="input-field col s12 l6">
-                                {{form_widget(form.amount, {'attr':{'class':'validate'}})}}
-                                <label for="mount">Votre participation</label>
+                                {{ form_widget(form.amount, {'attr':{'class':'validate', 'value': amount}}) }}
+                                {{ form_label(form.amount, 'Votre participation') }}
                             </div>
                             <p>
                                 <label>
-                                    <input type="checkbox" />
+                                    {{ form_widget(form.hidden_participant) }}
                                     <span>Masquer mon identité auprès des autres participants</span>
                                 </label>
                             </p>
                             <p>
                                 <label>
-                                    <input type="checkbox" />
+                                    {{ form_widget(form.hidden) }}
                                     <span>Masquer le montant de ma participation auprès des autres participants</span>
                                 </label>
                             </p>

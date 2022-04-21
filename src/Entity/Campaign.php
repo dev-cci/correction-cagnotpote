@@ -21,7 +21,7 @@ class Campaign
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="doctrine.ulid_generator")
+     * @ORM\CustomIdGenerator(class="doctrine.uuid_generator")
      */
     private $id;
 
@@ -217,5 +217,7 @@ class Campaign
         return $sum;
     }
 
-
+    public function getCompletionPercent(): int {
+        return round(100 / $this->goal * $this->getRecoltedAmount());
+    }
 }

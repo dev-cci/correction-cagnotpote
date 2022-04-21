@@ -52,6 +52,11 @@ class Participant
      */
     private $payments;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $hidden;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
@@ -128,4 +133,25 @@ class Participant
         return $this;
     }
 
+    public function getParticipation(): string
+    {
+        $sum = array_sum(array_map(function($payment) {
+            return $payment->getHidden() ? 0 : $payment->getAmount();
+        }, $this->payments->toArray()));
+
+        if ($sum == 0) return '---';
+        return $sum . '€';
+    }
+
+    public function getHidden(): ?bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool $hidden): self
+    {
+        $this->hidden = $hidden;
+
+        return $this;
+    }
 }

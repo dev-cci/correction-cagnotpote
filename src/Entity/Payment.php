@@ -52,6 +52,11 @@ class Payment
      */
     private $participant;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $hidden;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -101,6 +106,18 @@ class Payment
     public function setParticipant(?Participant $participant): self
     {
         $this->participant = $participant;
+
+        return $this;
+    }
+
+    public function getHidden(): ?bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool $hidden): self
+    {
+        $this->hidden = $hidden;
 
         return $this;
     }

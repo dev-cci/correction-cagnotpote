@@ -40,12 +40,13 @@ class CampaignController extends AbstractController
             $entityManager->persist($campaign);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_campaign_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_campaign_show', ['id' => $campaign->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('campaign/new.html.twig', [
             'campaign' => $campaign,
             'form' => $form,
+            'name' => $request->request->get('name')
         ]);
     }
 
@@ -83,7 +84,7 @@ class CampaignController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_campaign_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_campaign_show', ['id' => $campaign->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('campaign/edit.html.twig', [
@@ -104,7 +105,7 @@ class CampaignController extends AbstractController
     }
 
     #[Route('/{id}/payment', name: 'app_campaign_payment', methods: ['GET', 'POST'])]
-    public function payment(Campaign $campaign, Request $request, EntityManagerInterface $entityManager): Response
+    public function payment(Campaign $campaign, Request $request, EntityManagerInterface $entityManager, ManagerRegistry $doctrine): Response
     {
         $payment = new Payment();
         $form = $this->createForm(PaymentType::class, $payment);
@@ -114,20 +115,30 @@ class CampaignController extends AbstractController
             $participant = new Participant();
             $participant->setEmail($form->get("email")->getData());
             $participant->setCampaign($campaign);
-            $entityManager->persist($participant);
 
-            $payment->setParticipant($participant);
+            $savedParticipant = $doctrine->getRepository(Participant::class)->findOneBy(['email' => $participant->getEmail()]);
 
+            if (!$savedParticipant) {
+                $entityManager->persist($participant);
+                $savedParticipant = $participant;
+            }
+
+            $savedParticipant->setHidden($form->get("hidden_participant")->getData());
+            $entityManager->persist($savedParticipant);
+
+            $payment->setParticipant($savedParticipant);
             $entityManager->persist($payment);
             $entityManager->flush();
 
 
-            return $this->redirectToRoute('app_campaign_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_campaign_show', ['id' => $campaign->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('campaign/payment.html.twig', [
             'payment' => $payment,
+            'campaign' => $campaign,
             'form' => $form,
+            'amount' => $request->request->get('amount'),
         ]);
     }
     //pas compris
