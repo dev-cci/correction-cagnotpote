@@ -27,6 +27,7 @@ class PaymentType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Payment::class,
+            'attr' => ['id' => 'payment-form'],
         ]);
     }
 

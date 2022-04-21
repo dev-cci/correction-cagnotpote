@@ -28,7 +28,7 @@
                     <div class="card-content">
                     <form action="{{ path('app_campaign_payment', {'id': campaign.id}) }}" method="post">
                         <div class="input-field col s12 l6">
-                            <input name="amount" id="mount" type="number" class="validate">
+                            <input name="amount" id="mount" type="number" class="validate" required>
                             <label for="mount">Votre participation</label>
                         </div>
                         <button type="submit" class="btn-large waves-effect waves-light pink lighten-1 col s12 l6">Participer</button>
