@@ -133,14 +133,13 @@ class Participant
         return $this;
     }
 
-    public function getParticipation(): string
+    public function getParticipation(): int
     {
         $sum = array_sum(array_map(function($payment) {
             return $payment->getHidden() ? 0 : $payment->getAmount();
         }, $this->payments->toArray()));
 
-        if ($sum == 0) return '---';
-        return $sum . '€';
+        return $sum;
     }
 
     public function getHidden(): ?bool
