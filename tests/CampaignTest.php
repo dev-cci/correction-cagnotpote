@@ -46,4 +46,52 @@ class CampaignTest extends TestCase
         // ASSERT
         $this->assertEquals(25, $result);
     }
+
+    public function testWithStub(): void
+    {
+        // ARRANGE
+        $campaign = new Campaign();
+        $campaign->setEmail('test@gmail.com');
+
+        $participant1 = $this->createStub(Participant::class);
+        $participant2 = $this->createStub(Participant::class);
+
+        $campaign->addParticipant($participant1);
+        $campaign->addParticipant($participant2);
+
+        $participant1->method('getParticipation')
+                     ->willReturn(15);
+
+        $participant2->method('getParticipation')
+                     ->willReturn(10);
+
+        // ACT
+        $result = $campaign->getRecoltedAmount();
+
+        // ASSERT
+        $this->assertEquals(25, $result);
+    }
+
+    public function testMethodCallWithMock(): void
+    {
+        // ARRANGE
+        $campaign = new Campaign();
+        $campaign->setEmail('test@gmail.com');
+
+        $participant1 = $this->createMock(Participant::class);
+        $participant2 = $this->createMock(Participant::class);
+
+        $campaign->addParticipant($participant1);
+        $campaign->addParticipant($participant2);
+
+        // ASSERT
+        $participant1->expects($this->once())
+                     ->method('getParticipation');
+
+        $participant2->expects($this->once())
+                     ->method('getParticipation');
+
+        // ACT
+        $campaign->getRecoltedAmount();
+    }
 }
